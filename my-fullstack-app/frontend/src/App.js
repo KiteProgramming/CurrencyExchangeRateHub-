@@ -1,11 +1,14 @@
 import React from 'react';
-import ExampleComponent from './components/ExampleComponent';
+import CurrencyExchange from './components/CurrencyExchange';
+import ManageCurrencies from './components/ManageCurrencies';
+import ManualSync from './components/ManualSync';
 
 function App() {
     return (
         <div className="App">
-            <h1>Welcome to My Fullstack App</h1>
-            <ExampleComponent />
+            <CurrencyExchange />
+            <ManageCurrencies />
+            <ManualSync />
         </div>
     );
 }
