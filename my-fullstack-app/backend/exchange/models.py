@@ -2,13 +2,12 @@ from django.db import models
 from .fields import EncryptedCharField
 
 class CurrencyExchangeRate(models.Model):
-    currency = models.CharField(max_length=10)
-    rate = models.DecimalField(max_digits=10, decimal_places=4)
-    created_at = models.DateTimeField(auto_now_add=True)
+    pair = models.CharField(max_length=7, unique=True)  # e.g., "USD-EUR"
+    rate = models.DecimalField(max_digits=20, decimal_places=6)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.currency}: {self.rate}"
+        return f"{self.pair}: {self.rate}"
 
 class XECredentials(models.Model):
     api_key = EncryptedCharField(max_length=255)
@@ -26,7 +25,6 @@ class XECredentials(models.Model):
 class Currency(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
-    interval_minutes = models.IntegerField(default=60)  # Interval for scheduler in minutes
 
     def __str__(self):
         return self.code
