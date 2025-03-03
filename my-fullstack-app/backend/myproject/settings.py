@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.x/topics/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,7 +39,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'background_task',
     'corsheaders',
-    # Add your apps here
+    'django_crontab',
+    'django_apscheduler',    
+]
+
+CRONJOBS = [
+    ('*/60 * * * *', 'exchange.tasks.fetch_exchange_rates_cron')
 ]
 
 MIDDLEWARE = [
@@ -50,6 +56,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -93,6 +122,12 @@ LOGGING = {
     },
 }
 
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",  # React frontend URL
+]
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React frontend URL
 ]
@@ -102,7 +137,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.x/ref/settings/#databases
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'exchange',
@@ -111,6 +146,10 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     }
+} """
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 # Password validation

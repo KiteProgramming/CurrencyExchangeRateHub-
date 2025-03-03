@@ -1,0 +1,14 @@
+FROM node:14
+
+# Set work directory
+WORKDIR /app
+
+# Install dependencies
+COPY package.json /app/
+RUN npm install
+
+# Copy project
+COPY . /app/
+
+# Run the application
+CMD ["npm", "start"]

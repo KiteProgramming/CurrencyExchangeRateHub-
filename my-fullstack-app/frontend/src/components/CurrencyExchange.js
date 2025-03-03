@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+const getCsrfToken = () => {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+        }
+    }
+    return '';
+};
+
 const CurrencyExchange = ({ onRateAdded }) => {
     const [pair, setPair] = useState('');
     const [rate, setRate] = useState('');
@@ -18,8 +30,8 @@ const CurrencyExchange = ({ onRateAdded }) => {
         e.preventDefault();
         setError('');
 
-        if (!/^\d+(\.\d{1,6})?$/.test(rate)) {
-            setError('Rate must be a numeric value with up to 6 decimal places.');
+        if (!/^\d+(\.\d{1,4})?$/.test(rate)) {
+            setError('Rate must be a numeric value with up to 4 decimal places.');
             return;
         }
 
@@ -28,11 +40,14 @@ const CurrencyExchange = ({ onRateAdded }) => {
             return;
         }
 
+        const csrfToken = getCsrfToken();
+
         // Save the new exchange rate to the backend API
         fetch('http://localhost:8000/api/add-exchange-rate/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
             },
             body: JSON.stringify({ pair, rate }),
         })

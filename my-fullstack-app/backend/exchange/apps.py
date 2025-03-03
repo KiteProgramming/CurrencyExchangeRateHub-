@@ -1,8 +1,10 @@
 from django.apps import AppConfig
+import sys
 
 class ExchangeConfig(AppConfig):
     name = 'exchange'
 
     def ready(self):
-        from .tasks import schedule_fetch_exchange_rates
-        schedule_fetch_exchange_rates()
+        if 'runserver' in sys.argv or 'runserver_plus' in sys.argv:
+            from .scheduler import start
+            start()

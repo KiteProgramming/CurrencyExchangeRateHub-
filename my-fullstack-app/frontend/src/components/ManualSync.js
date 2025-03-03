@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const ManualSync = ({ onSyncComplete }) => {
+    const [apiChoice, setApiChoice] = useState('XE');
+
     const handleSync = () => {
-        fetch('http://localhost:8000/api/manual-sync/', {
+        fetch(`http://localhost:8000/api/manual-sync/?api_choice=${apiChoice}`, {
             method: 'GET',
         })
         .then(response => {
@@ -22,7 +24,14 @@ const ManualSync = ({ onSyncComplete }) => {
 
     return (
         <div className="text-center mt-5">
-            <button onClick={handleSync} className="btn btn-primary btn-lg">Call XE API for the Synchronization of Rates</button>
+            <div className="form-group">
+                <label htmlFor="apiChoice">Select API:</label>
+                <select id="apiChoice" className="form-control" value={apiChoice} onChange={(e) => setApiChoice(e.target.value)}>
+                    <option value="XE">XE</option>
+                    <option value="ExchangeRate-API">ExchangeRate-API</option>
+                </select>
+            </div>
+            <button onClick={handleSync} className="btn btn-primary btn-lg">Call API for the Synchronization of Rates</button>
         </div>
     );
 };
