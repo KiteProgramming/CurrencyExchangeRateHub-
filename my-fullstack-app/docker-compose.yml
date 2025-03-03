@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:13
@@ -8,11 +6,12 @@ services:
     environment:
       POSTGRES_DB: exchange
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 710561Pp*
+      POSTGRES_PASSWORD: YOUR_PASSWORD
 
   backend:
     build:
       context: ./backend
+      dockerfile: DockerFile
     volumes:
       - ./backend:/app
     ports:
@@ -20,11 +19,12 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgres://postgres:710561Pp*@db:5432/exchange
+      DATABASE_URL: postgres://postgres:YOURPASSWORD@db:5432/exchange
 
   frontend:
     build:
       context: ./frontend
+      dockerfile: DockerFile
     volumes:
       - ./frontend:/app
     ports:
